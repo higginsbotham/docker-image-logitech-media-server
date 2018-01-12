@@ -19,10 +19,10 @@ RUN apt-get update -q && \
         libsox-fmt-mp3 \
         tzdata \
         libio-socket-ssl-perl
-ADD lms.deb /tmp/logitechmediaserver.deb
+
 # Install LMS nightly build and upgrade tools
 RUN url=$( curl -Lsf "http://www.mysqueezebox.com/update/?version=${LMS_VERSION}&revision=1&geturl=1&os=deb" | sed 's/_all/_amd64/' ) && \
-    #curl -Lsf -o /tmp/logitechmediaserver.deb $url && \
+    curl -Lsf -o /tmp/logitechmediaserver.deb $url && \
     dpkg -i /tmp/logitechmediaserver.deb && \
     rm -f /tmp/logitechmediaserver.deb && \
     # Reduce LMS of cruft: Font, Graphics
