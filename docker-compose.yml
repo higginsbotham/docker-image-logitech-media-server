@@ -1,0 +1,34 @@
+version: "3"
+
+services:
+  lms:
+    build:
+        context: ./build
+        args:
+            HTTP_PORT: ${HTTP_PORT}
+            LMS_VERSION: ${LMS_VERSION}
+    image: beargarden/logitechmediaserver
+    container_name: lms
+    volumes:
+      - ${AUDIO_DIR}:/music:ro
+      - ${PLAYLIST_DIR}:/playlists:rw
+      - ${CONFIG_DIR}:/config
+    tmpfs: /tmp
+    ports:
+      - "${HTTP_PORT}:${HTTP_PORT}"
+      - "9090:9090"
+      - "3483:3483"
+      - "3483:3483/udp"
+    restart: always
+    environment:
+      - HTTP_PORT=${HTTP_PORT}
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - SOX_OPTS=${SOX_OPTS}
+      - NO_SLIMP3=${NO_SLIMP3}
+      - NO_MYSQUEEZEBOX=${NO_MYSQUEEZEBOX}
+      - NO_IMAGE=${NO_IMAGE}
+      - NO_VIDEO=${NO_VIDEO}
+      - NO_WEB=${NO_WEB}
+      - NO_ADMIN=${NO_ADMIN}

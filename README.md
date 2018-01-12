@@ -3,14 +3,16 @@
 This is a Docker image for running the Logitech Media Server package
 (aka SqueezeboxServer).
 
-It contains my own `custom-convert.conf` and one patch to enhance the audio quality of the stream. Updated de/encoders make use of not-well-documented functionality in order to more fully integrate SoX's stellar resampling capabilities.
+It contains my own transcoding rules that make use of not-well-documented functionality in order to more fully integrate SoX's stellar resampling capabilities.
 
-The web interface runs on port 9000. Players will connect on that port so make sure it remains published even if you also publish it to host port 80 ("80:9000"), or if you disable the web server (see Environment Variables, below).
+Binaries for popular de/encoders are updated to latest versions.
+
+The web interface runs on port 9000. Players will connect on that port so make sure it remains published even if you also publish it to host port 80 (`80:9000`), or if you disable the web server (see Environment Variables, below).
 
 Using docker-compose
 ====================
 
-There is a [docker-compose.yml][] included in this repository. This is currently the best way to build the image and run the container. The compose file includes the following:
+There is a [docker-compose.yml][] included in this repository. This is currently the best way to build the image and run the container, since it is not published on the Docker Hub. The compose file includes the following:
 
     volumes:
       - ${AUDIO_DIR}:/music:ro
@@ -30,8 +32,8 @@ There are a few other environment variables you can set in the same way:
 
 * `TZ`: The timezone, such as `TZ=America/New_York`.
 * `PUID` and `PGID`: In case permissions are an issue, set the UID and GID for the process. This will also `chown` the Squeezebox directories. Defaults: `99` (PUID) and `100` (PGID)
-* `SOX_OPTS`: Define global options for SoX, such as --guard to prevent clipping when resampling.
-* `NO_SLIMP3`: Disable support for SliMP3s, SB1s and associated synchronization. Default: `true`
+* `SOX_OPTS`: Define global options for SoX, such as `--guard` to prevent clipping when resampling.
+* `NO_SLIMP3`: Disable support for SliMP3s, SB1s and associated synchronization. Default: `false`
 * `NO_MYSQUEEZEBOX`: Disable mysqueezebox.com integration. Default: `false`
 * `NO_IMAGE`: Disable scanning for images. (Will still scan for cover images.) Default: `true`
 * `NO_VIDEO`: Disable scanning for videos. Default: `true`
