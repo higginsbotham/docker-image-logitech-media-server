@@ -5,7 +5,7 @@ This is a Docker image for running the Logitech Media Server package
 
 It contains my own transcoding rules that make use of not-well-documented functionality in order to more fully integrate SoX's stellar resampling capabilities.
 
-Also, when transcoding to MP3 the encoder uses VBR mode in most cases instead of ABR. The two exceptions are when no bitrate limitation is present, the quality is VBR 0 (`--preset extreme`), and for 320kbps it uses CBR mode (`--preset insane`).
+Also, when transcoding to MP3 the encoder uses VBR mode for most target bitrates instead of ABR. The two exceptions are when no bitrate target is specified by the player, the default quality setting is VBR 0 (`--preset extreme`), and when 320kbps is specified it uses CBR mode (`--preset insane`).
 
 Binaries for popular de/encoders are updated to latest versions.
 
