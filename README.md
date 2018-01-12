@@ -32,6 +32,7 @@ Environment Variables
 
 There are a few other environment variables you can set in the same way:
 
+* `LMS_VERSION`: The version to install. For nightly set to `7.9.1`. Default: `7.9.0`
 * `TZ`: The timezone, such as `TZ=America/New_York`.
 * `PUID` and `PGID`: In case permissions are an issue, set the UID and GID for the process. This will also `chown` the Squeezebox directories. Defaults: `99` (PUID) and `100` (PGID)
 * `SOX_OPTS`: Define global options for SoX, such as `--guard` to prevent clipping when resampling.
