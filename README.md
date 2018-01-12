@@ -28,14 +28,14 @@ Environment Variables
 
 There are a few other environment variables you can set in the same way:
 
-    * `TZ`: The timezone, such as `TZ=America/New_York`.
-    * `PUID` and `PGID`: In case permissions are an issue, set the UID and GID for the process. This will also `chown` the Squeezebox directories. Defaults: `99` (PUID) and `100` (PGID)
-    * `SOX_OPTS`: Define global options for SoX, such as --guard to prevent clipping when resampling.
-    * `NO_SLIMP3`: Disable support for SliMP3s, SB1s and associated synchronization. Default: `true`
-    * `NO_MYSQUEEZEBOX`: Disable mysqueezebox.com integration. Default: `false`
-    * `NO_IMAGE`: Disable scanning for images. (Will still scan for cover images.) Default: `true`
-    * `NO_VIDEO`: Disable scanning for videos. Default: `true`
-    * `NO_WEB`: Disable web interface. JSON-RPC, Comet, and artwork web APIs are still enabled. Default: `false`
-    * `NO_ADMIN`: Disable web access server settings, but leave player settings accessible. Settings changes are not preserved. Default: `false`
+* `TZ`: The timezone, such as `TZ=America/New_York`.
+* `PUID` and `PGID`: In case permissions are an issue, set the UID and GID for the process. This will also `chown` the Squeezebox directories. Defaults: `99` (PUID) and `100` (PGID)
+* `SOX_OPTS`: Define global options for SoX, such as --guard to prevent clipping when resampling.
+* `NO_SLIMP3`: Disable support for SliMP3s, SB1s and associated synchronization. Default: `true`
+* `NO_MYSQUEEZEBOX`: Disable mysqueezebox.com integration. Default: `false`
+* `NO_IMAGE`: Disable scanning for images. (Will still scan for cover images.) Default: `true`
+* `NO_VIDEO`: Disable scanning for videos. Default: `true`
+* `NO_WEB`: Disable web interface. JSON-RPC, Comet, and artwork web APIs are still enabled. Default: `false`
+* `NO_ADMIN`: Disable web access server settings, but leave player settings accessible. Settings changes are not preserved. Default: `false`
     
 [docker-compose.yml]: docker-compose.yml
