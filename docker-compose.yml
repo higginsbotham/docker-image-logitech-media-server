@@ -4,9 +4,6 @@ services:
   lms:
     build:
         context: ./build
-        args:
-            HTTP_PORT: ${HTTP_PORT}
-            LMS_VERSION: ${LMS_VERSION}
     image: beargarden/logitechmediaserver
     container_name: lms
     volumes:
@@ -15,13 +12,12 @@ services:
       - ${CONFIG_DIR}:/config
     tmpfs: /tmp
     ports:
-      - "${HTTP_PORT}:${HTTP_PORT}"
+      - "9000:9000"
       - "9090:9090"
       - "3483:3483"
       - "3483:3483/udp"
     restart: always
     environment:
-      - HTTP_PORT=${HTTP_PORT}
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
