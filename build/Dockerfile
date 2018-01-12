@@ -1,6 +1,5 @@
 FROM debian:stable-slim
 
-# This defaults to the latest stable version. Set 7.9.1 for nightly.
 ARG LMS_VERSION=7.9.0
 
 ENV HTTP_PORT=9000 \
