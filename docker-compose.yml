@@ -4,6 +4,9 @@ services:
   lms:
     build:
         context: ./build
+# Uncomment the following lines to install nightly.
+#        args:
+#            LMS_VERSION: 7.9.1
     image: beargarden/logitechmediaserver
     container_name: lms
     volumes:
@@ -18,13 +21,13 @@ services:
       - "3483:3483/udp"
     restart: always
     environment:
+      - NO_SLIMP3=false
+      - NO_MYSQUEEZEBOX=false
+      - NO_IMAGE=true
+      - NO_VIDEO=true
+      - NO_WEB=false
+      - NO_ADMIN=false
+      - SOX_OPTS=--buffer 20000 --temp /tmp
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - SOX_OPTS=${SOX_OPTS}
-      - NO_SLIMP3=${NO_SLIMP3}
-      - NO_MYSQUEEZEBOX=${NO_MYSQUEEZEBOX}
-      - NO_IMAGE=${NO_IMAGE}
-      - NO_VIDEO=${NO_VIDEO}
-      - NO_WEB=${NO_WEB}
-      - NO_ADMIN=${NO_ADMIN}
