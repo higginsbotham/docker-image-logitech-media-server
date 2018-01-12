@@ -30,7 +30,7 @@ To provide values for these, you can edit the file directly, or create a `.env` 
 Environment Variables
 ---------------------
 
-There are a few other environment variables you can set:
+There are a few other environment variables you can set in the same way:
 
 * `TZ`: The timezone, such as `TZ=America/New_York`.
 * `PUID` and `PGID`: In case permissions are an issue, set the UID and GID for the process. This will also `chown` the Squeezebox directories. Defaults: `99` (PUID) and `100` (PGID)
