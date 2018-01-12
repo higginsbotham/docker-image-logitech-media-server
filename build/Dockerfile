@@ -2,9 +2,9 @@ FROM debian:stable-slim
 
 # This defaults to the latest stable version. Set 7.9.1 for nightly.
 ARG LMS_VERSION=7.9.0
-ARG HTTP_PORT=9000
 
-ENV SQUEEZE_VOL="/config" \
+ENV HTTP_PORT=9000 \
+    SQUEEZE_VOL="/config" \
     LANG=C.UTF-8 \
     DEBIAN_FRONTEND=noninteractive
 
@@ -48,7 +48,6 @@ RUN url=$( curl -Lsf "http://www.mysqueezebox.com/update/?version=${LMS_VERSION}
 	apt-get update -q && \
     apt-get upgrade -q -y --no-install-recommends --no-install-suggests && \
     apt-get dist-upgrade -q -y --no-install-recommends --no-install-suggests && \
-    apt-get autoremove -q -y && \
     apt-get clean -q -y && \
     rm -rf \
         /tmp/* \
