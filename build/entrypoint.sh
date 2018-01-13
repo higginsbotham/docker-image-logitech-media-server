@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
 # Define a timestamp function
 ts() {
@@ -13,7 +13,7 @@ export SQUEEZE_UID=$( id -u squeezeboxserver ) \
 if [ ! -z "$PUID" ]; then
 
     export PUID=$(echo "$PUID" | sed -e 's/[^0-9]*//g')
-    ts info "Squeezebox UID defined as $PUID"
+    ts setup "Squeezebox UID defined as $PUID"
   
 else
 
@@ -25,7 +25,7 @@ fi
 if [ ! -z "$PGID" ]; then
 
     export PGID=$(echo "$PGID" | sed -e 's/[^0-9]*//g')
-    ts info "Squeezebox GID defined as $PGID"
+    ts setup "Squeezebox GID defined as $PGID"
   
 else
 
@@ -42,14 +42,14 @@ fi
 
 if [ "$SQUEEZE_VOL" ] && [ -d "$SQUEEZE_VOL" ]; then
     for subdir in prefs logs cache; do
-        mkdir -p $SQUEEZE_VOL/$subdir
+        [ ! -d "$SQUEEZE_VOL/$subdir" ] && mkdir -p $SQUEEZE_VOL/$subdir
     done
     chown -R squeezeboxserver:nogroup $SQUEEZE_VOL
 fi
 
 # This has to happen every time in case our new uid/gid is different
 # from what was previously used in the volume.
-for f in /usr/share/squeezeboxserver /etc/squeezeboxserver $SQUEEZE_VOL; do
+for f in /usr/share/squeezeboxserver /etc/squeezeboxserver; do
     [ -d "$f" ] && chown -R squeezeboxserver:nogroup "$f"
 done
 
@@ -58,22 +58,29 @@ if [ ! -z "$TZ" ] && [ "$TZ" != "$( cat /etc/timezone 2>/dev/null )" ]; then
     echo "$TZ" > /etc/timezone && \
     ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime && \
     dpkg-reconfigure -f noninteractive tzdata
-    ts info "Container timezone set to: $TZ"
+    ts setup "Container timezone set to: $TZ"
 else
-    ts info "Container timezone not modified: $TZ"
+    ts setup "Container timezone not modified: $TZ"
 fi
 
 # LMS config
-mkdir -p "$SQUEEZE_VOL/cache" "$SQUEEZE_VOL/logs" "$SQUEEZE_VOL/prefs"
-
-set -- /etc/squeezeboxserver/*.prefs.install
+set -- /home/*.prefs.install
 if [ -f "$1" ]; then
-    for pref in /etc/squeezeboxserver/*.prefs.install; do
+    for pref in /home/*.prefs.install; do
         if [ -f "$pref" ]; then
-            ts info "Installing transcoding rule: $( basename "$pref" )"
+            ts setup "Installing transcoding rule: $( basename "$pref" | cut -d. -f1 )"
             prefInstalled="$SQUEEZE_VOL/prefs/$( basename "$pref" | sed -e 's/\.install//' )"
             [ ! -f "$prefInstalled" ] && cp "$pref" "$prefInstalled"
             mv "$pref" "$SQUEEZE_VOL/prefs/"
+        fi
+    done
+fi
+set -- /home/*.conf
+if [ -f "$1" ]; then
+    for conf in /home/*.conf; do
+        if [ -f "$conf" ]; then
+            ts setup "Installing configuration file: $( basename "$conf" | cut -d. -f1 )"
+            [ ! -f "/etc/squeezeboxserver/$( basename "$conf" )" ] && mv "$conf" "/etc/squeezeboxserver/"
         fi
     done
 fi

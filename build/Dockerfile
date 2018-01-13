@@ -7,21 +7,27 @@ ENV HTTP_PORT=9000 \
     LANG=C.UTF-8 \
     DEBIAN_FRONTEND=noninteractive
 
+COPY prefs/* /home/
+COPY entrypoint.sh /entrypoint.sh
+COPY healthcheck.sh /healthcheck.sh
+
 RUN apt-get update -q && \
-    apt-get install -q -y --no-install-recommends \
-        curl \
+    apt-get install -q -y --no-install-recommends --no-install-suggests \
+        wget \
+        ca-certificates \
+        openssl \
         faad \
         wavpack \
         flac \
         lame \
-        sox \
+        libsox-fmt-ao \
         libsox-fmt-mp3 \
+        sox \
         tzdata \
-        libio-socket-ssl-perl
-
-# Install LMS nightly build and upgrade tools
-RUN url=$( curl -Lsf "http://www.mysqueezebox.com/update/?version=${LMS_VERSION}&revision=1&geturl=1&os=deb" | sed 's/_all/_amd64/' ) && \
-    curl -Lsf -o /tmp/logitechmediaserver.deb $url && \
+        libio-socket-ssl-perl && \
+    # Install LMS nightly build and upgrade tools
+    url=$( wget -qO- "http://www.mysqueezebox.com/update/?version=${LMS_VERSION}&revision=1&geturl=1&os=deb" | sed 's/_all/_amd64/' ) && \
+    wget -qO /tmp/logitechmediaserver.deb $url && \
     dpkg -i /tmp/logitechmediaserver.deb && \
     rm -f /tmp/logitechmediaserver.deb && \
     # Reduce LMS of cruft: Font, Graphics
@@ -45,28 +51,29 @@ RUN url=$( curl -Lsf "http://www.mysqueezebox.com/update/?version=${LMS_VERSION}
     done && \
 	# Clean up
 	apt-get update -q && \
-    apt-get upgrade -q -y --no-install-recommends && \
-    apt-get dist-upgrade -q -y --no-install-recommends && \
     apt-get clean -q -y && \
+    apt-get purge -q -y --auto-remove --allow-remove-essential bash apt && \
     rm -rf \
         /tmp/* \
         /var/tmp/* \
         /var/lib/apt/lists/* \
-        /usr/local/share/* && \
+        /usr/local/share/* \
+        /usr/share/doc/* \
+        /usr/share/groff/* \
+        /usr/share/info/* \
+        /usr/share/linda/* \
+        /usr/share/lintian/* \
+        /usr/share/locale/* \
+        /usr/share/man/* && \
     # Volumes and permissions
     mkdir -p $SQUEEZE_VOL && \
-    chown -R squeezeboxserver:nogroup $SQUEEZE_VOL
+    chown -R squeezeboxserver $SQUEEZE_VOL && \
+    chmod +x /entrypoint.sh && \
+    chmod +x /healthcheck.sh
 
 VOLUME $SQUEEZE_VOL
 
 EXPOSE 3483 3483/udp $HTTP_PORT 9090
-
-COPY prefs/* /etc/squeezeboxserver/
-
-COPY entrypoint.sh /entrypoint.sh
-COPY healthcheck.sh /healthcheck.sh
-RUN chmod +x /entrypoint.sh \
-    && chmod +x /healthcheck.sh
 
 HEALTHCHECK --interval=5m --timeout=5s \
     CMD /healthcheck.sh
