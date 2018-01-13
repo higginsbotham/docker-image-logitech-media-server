@@ -8,7 +8,7 @@ ENV HTTP_PORT=9000 \
     DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update -q && \
-    apt-get install -q -y --no-install-recommends --no-install-suggests \
+    apt-get install -q -y --no-install-recommends \
         curl \
         faad \
         wavpack \
@@ -45,8 +45,8 @@ RUN url=$( curl -Lsf "http://www.mysqueezebox.com/update/?version=${LMS_VERSION}
     done && \
 	# Clean up
 	apt-get update -q && \
-    apt-get upgrade -q -y --no-install-recommends --no-install-suggests && \
-    apt-get dist-upgrade -q -y --no-install-recommends --no-install-suggests && \
+    apt-get upgrade -q -y --no-install-recommends && \
+    apt-get dist-upgrade -q -y --no-install-recommends && \
     apt-get clean -q -y && \
     rm -rf \
         /tmp/* \
@@ -68,7 +68,7 @@ COPY healthcheck.sh /healthcheck.sh
 RUN chmod +x /entrypoint.sh \
     && chmod +x /healthcheck.sh
 
-HEALTHCHECK --interval=15m --timeout=10s \
+HEALTHCHECK --interval=5m --timeout=5s \
     CMD /healthcheck.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
