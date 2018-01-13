@@ -5,8 +5,8 @@ services:
     build:
         context: ./build
 # Uncomment the following lines to install nightly.
-        args:
-            LMS_VERSION: 7.9.1
+#        args:
+#            LMS_VERSION: 7.9.1
     image: beargarden/logitechmediaserver
     container_name: lms
     volumes:
