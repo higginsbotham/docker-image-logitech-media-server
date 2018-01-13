@@ -1,9 +1,9 @@
 # Docker Container for Logitech Media Server
 
-This is a Docker image for running the Logitech Media Server package
+This is a Docker image for running the [Logitech Media Server](https://github.com/Logitech/slimserver) package
 (aka SqueezeboxServer).
 
-It contains my own transcoding rules that make use of not-well-documented functionality in order to more fully integrate SoX's stellar resampling capabilities.
+It contains my own transcoding rules that make use of not-well-documented  functionality in order to more fully integrate SoX's stellar resampling capabilities.
 
 Also, when transcoding to MP3 the encoder uses VBR mode for most target bitrates instead of ABR. The two exceptions are when no bitrate target is specified by the player, the default quality setting is VBR 0 (`--preset extreme`), and when 320kbps is specified it uses CBR mode (`--preset insane`).
 
@@ -34,16 +34,18 @@ There are a few other environment variables you can set in the same way:
 
 * `TZ`: The timezone, such as `TZ=America/New_York`.
 * `PUID` and `PGID`: In case permissions are an issue, set the UID and GID for the process. This will also `chown` the Squeezebox directories. Defaults: `99` (PUID) and `100` (PGID)
+* `SOX_OPTS`: Define global options for SoX, such as `--guard` to prevent clipping when resampling.
 
 The [docker-compose.yml][] file can be edited to change these:
 
+* `UPSAMPLE_STREAM`: Enable upsampling playback. Default: `false`
+* `SAMPLE_RATE_LIMIT`: Limit the sample rate when resampling. Default: `96000`
 * `NO_SLIMP3`: Disable support for SliMP3s, SB1s and associated synchronization. Default: `false`
 * `NO_MYSQUEEZEBOX`: Disable mysqueezebox.com integration. Default: `false`
 * `NO_IMAGE`: Disable scanning for images. (Will still scan for cover images.) Default: `true`
 * `NO_VIDEO`: Disable scanning for videos. Default: `true`
 * `NO_WEB`: Disable web interface. JSON-RPC, Comet, and artwork web APIs are still enabled. Default: `false`
 * `NO_ADMIN`: Disable web access server settings, but leave player settings accessible. Settings changes are not preserved. Default: `false`
-* `SOX_OPTS`: Define global options for SoX, such as `--guard` to prevent clipping when resampling.
 
 It passes `LMS_VERSION` to the Dockerfile as a build argument:
 * `LMS_VERSION`: The version to install. For nightly set to `7.9.1`. Default: `7.9.0`
